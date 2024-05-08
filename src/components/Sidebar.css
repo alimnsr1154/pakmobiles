@@ -1,0 +1,12 @@
+.sidebar button {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+    text-align: left;
+    border: 1px solid rgb(0, 0, 0);
+    /* Add this line */
+}
+.sidebar .arrow {
+    margin-right: 10px;
+    /* Add this line */
+}
