@@ -1,0 +1,11 @@
+import React from 'react';
+import './Card.css';
+const Card = ({ image, name, price }) => (
+    <div className="card">
+        <img src={image} alt={name} />
+        <h2>{name}</h2>
+        <p>{price}</p>
+    </div>
+);
+
+export default Card;

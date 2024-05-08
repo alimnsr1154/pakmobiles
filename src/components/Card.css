@@ -1,0 +1,22 @@
+.card {
+    width: 150px;
+    height: 200px;
+    /* Adjust as needed */
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.card img {
+    width: 70%;
+    height: auto;
+}
+
+.card h2 {
+    font-size: 18px;
+    /* Adjust as needed */
+    margin: 0;
+    padding: 0;
+}
