@@ -18,7 +18,5 @@
 
 .content {
     flex-grow: 1;
-
     overflow: auto;
-    /* Add this line to add a scrollbar if the content is too long */
 }
