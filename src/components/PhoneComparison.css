@@ -1,0 +1,83 @@
+/* styles.css */
+
+/* Global styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+/* Form control styles */
+form-control {
+  margin-bottom: 15px;
+}
+
+form-control input,
+form-control textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+}
+
+form-control input:focus,
+form-control textarea:focus {
+  outline: 2px solid #4caf50;
+}
+
+/* PhoneComparison component styles */
+.phone-comparison-container {
+  margin-top: 20px;
+}
+
+.phone-select {
+  width: 100%;
+}
+
+.compare-table-container {
+  margin-top: 20px;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.compare-table th,
+.compare-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.compare-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.compare-table td {
+  background-color: #fff;
+}
+
+.compare-table th:first-child,
+.compare-table td:first-child {
+  text-align: left;
+}
+
+.compare-table th:first-child {
+  border-top-left-radius: 5px;
+}
+
+.compare-table th:last-child {
+  border-top-right-radius: 5px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .compare-table th,
+  .compare-table td {
+    padding: 8px;
+  }
+}
