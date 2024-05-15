@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CreateListing.css'; // Import the CSS file
+import '../css/CreateListing.css'; // Import the CSS file
 
 const CreateListing = () => {
   // State to manage form inputs

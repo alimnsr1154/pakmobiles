@@ -8,7 +8,7 @@ const CardContainer = ({ title, cards }) => (
     <h1>{title}</h1>
     <div className="card-container">
       {cards.map((card, index) => (
-        <Link to="/phoneDetail" key={index}> {/* Wrap Card with Link */}
+        <Link to="/PhoneDetail" key={index}> {/* Wrap Card with Link */}
           <Card {...card} />
         </Link>
       ))}

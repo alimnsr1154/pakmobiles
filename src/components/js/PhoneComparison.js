@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createTheme } from '@mui/material/styles';
-import './PhoneComparison.css'; // Import the CSS file
+import '../css/PhoneComparison.css'; // Import the CSS file
 
 
 import {
