@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import CardContainer from './CardContainer';
 import Sidebar from './Sidebar'; // Import the Sidebar component
 import image from './iphone.jpeg';
-import './Dashboard.css'; // Import the CSS file
+import '../css/Dashboard.css'; // Import the CSS file
 
 const Dashboard = () => {
     const cards = [
@@ -14,8 +14,9 @@ const Dashboard = () => {
         { image: image, name: 'Name 5', price: '$500' },
         // Add more cards as needed
     ];
-    
+
     return (
+       
         <div className="dashboard">
             <Sidebar /> {/* Use the Sidebar component here */}
             <div className="content">

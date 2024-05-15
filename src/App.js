@@ -1,11 +1,18 @@
 import React from 'react';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/js/Dashboard';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+
 
 function App() {
   return (
     <div className="App">
-      <Dashboard />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/phoneDetail"/>
+        </Routes>
+      </Router>
     </div>
   );
 }

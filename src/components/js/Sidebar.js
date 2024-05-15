@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Sidebar.css'; // Import the CSS file
+import '../css/Sidebar.css';
 
 const Sidebar = () => {
     const [isBrandExpanded, setBrandExpanded] = useState(false);
