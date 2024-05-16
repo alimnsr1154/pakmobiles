@@ -5,6 +5,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CreateListing from './components/js/CreateListing';
 import PhoneComparison from './components/js/PhoneComparison';
 import './App.css';
+import Login from './components/login';
+import SignUp from './components/Signup'; // Create SignUp component if not already done
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MessagePage from './components/Messagepage';
+
 
 function App() {
   return (
