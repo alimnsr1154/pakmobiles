@@ -1,12 +1,29 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import { Link } from 'react-router-dom'; // Import Link component
+import axios from 'axios';
 import './Signup.css';
-
 export default class SignUp extends Component {
+
+    handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = {
+            name: event.target.elements.name.value,
+            email: event.target.elements.email.value,
+            password: event.target.elements.password.value,
+        };
+
+        try {
+            const response = await axios.post('http://localhost:5000/signup', formData);
+            console.log('Sign-up successful', response.data);
+            //navigate to login page here: singup ---->> login
+            
+        } catch (err) {
+            console.error('Error during sign-up', err);
+        }
+    };
+
     render() {
         return (
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <h3>Sign UP</h3>
                 <div className="mb-3">
                     <label>Name</label>
@@ -14,6 +31,7 @@ export default class SignUp extends Component {
                         type="text"
                         className="form-control"
                         placeholder="Enter full name"
+                        name="name"
                     />
                 </div>
                 <div className="mb-3">
@@ -22,6 +40,7 @@ export default class SignUp extends Component {
                         type="email"
                         className="form-control"
                         placeholder="Enter email"
+                        name="email"
                     />
                 </div>
                 <div className="mb-3">
@@ -30,13 +49,13 @@ export default class SignUp extends Component {
                         type="password"
                         className="form-control"
                         placeholder="Enter password"
-                    />  
+                        name="password"
+                    />
                 </div>
                 <div className="d-grid">
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </div>
-                <p className="signup-link text-center">Already have an account? <a href="/">Login</a></p>
-                {/* <p className="signup-link text-center">Already have an account? <Link to="/login">Login</Link></p> */}
+                <p className="signup-link text-center">Already have an account? <a href="/login">Login</a></p>
             </form>
         );
     }

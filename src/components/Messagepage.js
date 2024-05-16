@@ -1,25 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './MessagePage.css';
 
 const MessagePage = () => {
+  const [chats, setChats] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  const id = 2; // Assuming the user with id=1 is John Doe
+  useEffect(() => {
+    // Fetch chats on component mount
+    const fetchChats = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/chats');
+        setChats(response.data);
+      } catch (error) {
+        console.error('Error fetching chats:', error);
+      }
+    };
+    fetchChats();
+  }, []);
 
-  const chats = [
-    //"D:\NUCES Record 2021-2025\Semester 6\Assignments\Web\git project\pakmobiles\src\components\image.JPG"
-    { id: 1, title: 'Chat 1', avatar: 'https://via.placeholder.com/50' },
-    { id: 2, title: 'Chat 2', avatar: 'https://via.placeholder.com/50' },
-    { id: 3, title: 'Chat 3', avatar: 'https://via.placeholder.com/50' },
-  ];
-
-  const messages = [
-    { id: 1, chatId: 1, text: 'Hello, this is Chat 1', sender: 'other' },
-    { id: 2, chatId: 1, text: 'How are you?', sender: 'self' },
-    { id: 3, chatId: 2, text: 'Hi, this is Chat 2', sender: 'other' },
-    { id: 4, chatId: 2, text: 'Whats up?', sender: 'self' },
-    { id: 5, chatId: 3, text: 'Hey, this is Chat 3', sender: 'other' },
-    { id: 6, chatId: 3, text: 'Hows it going?', sender: 'self' },
-  ];
+  useEffect(() => {
+    // Fetch messages for the selected chat
+    // const fetchMessages = async () => {
+    //   if (selectedChat) {
+    //     try {
+    //       const response = await axios.get(`http://localhost:5000/messages/${selectedChat}`);
+    //       setMessages(response.data);
+    //     } catch (error) {
+    //       console.error('Error fetching messages:', error);
+    //     }
+    //   }
+    // };
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/messages/${id}`);
+        const messages = response.data.map((message) => ({
+          messageId: message.messageId,
+          chatId: message.chatId,
+          text: message.message,
+          sender: message.sender_id === id ? 'self' : 'other',
+        }));
+        setMessages(messages);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    };
+    fetchMessages();
+  }, [selectedChat]);
 
   const handleChatClick = (chatId) => {
     setSelectedChat(chatId);
@@ -33,12 +62,12 @@ const MessagePage = () => {
     if (newMessage.trim() !== '') {
       // Add new message to the messages array
       const newMessageObj = {
-        id: messages.length + 1,
+        messageId: messages.length + 1,
         chatId: selectedChat,
         text: newMessage,
         sender: 'self',
       };
-      messages.push(newMessageObj);
+      setMessages([...messages, newMessageObj]);
       setNewMessage('');
     }
   };
@@ -52,11 +81,11 @@ const MessagePage = () => {
         <ul className="chat-list-items">
           {chats.map((chat) => (
             <li
-              key={chat.id}
-              className={selectedChat === chat.id ? 'selected' : ''}
-              onClick={() => handleChatClick(chat.id)}
+              key={chat.chatId}
+              className={selectedChat === chat.chatId ? 'selected' : ''}
+              onClick={() => handleChatClick(chat.chatId)}
             >
-              <img src={chat.avatar} alt={chat.title} className="chat-avatar" />
+              <img src={`/uploads/${chat.avatarFilename}`} alt={chat.title} className="chat-avatar" />
               <span className="chat-title">{chat.title}</span>
             </li>
           ))}
@@ -65,22 +94,20 @@ const MessagePage = () => {
       <div className="chat-messages">
         <div className="chat-header">
           <img
-            src={selectedChat ? chats.find((chat) => chat.id === selectedChat).avatar : ''}
+            src={selectedChat ? `/uploads/${chats.find((chat) => chat.chatId === selectedChat).avatarFilename}` : ''}
             alt="Chat Avatar"
             className="chat-avatar"
           />
-          <h2>{selectedChat ? chats.find((chat) => chat.id === selectedChat).title : 'Select a chat'}</h2>
+          <h2>{selectedChat ? chats.find((chat) => chat.chatId === selectedChat).title : 'Select a chat'}</h2>
         </div>
         <div className="message-list">
           {selectedChat && (
             <ul>
-              {messages
-                .filter((message) => message.chatId === selectedChat)
-                .map((message) => (
-                  <li key={message.id} className={message.sender === 'self' ? 'sent' : 'received'}>
-                    {message.text}
-                  </li>
-                ))}
+              {messages.map((message) => (
+                <li key={message.messageId} className={message.sender === 'self' ? 'sent' : 'received'}>
+                  {message.text}
+                </li>
+              ))}
             </ul>
           )}
         </div>
