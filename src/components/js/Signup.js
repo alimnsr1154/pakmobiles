@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import './Signup.css';
+import '../css/Signup.css';
 export default class SignUp extends Component {
 
     handleSubmit = async (event) => {
