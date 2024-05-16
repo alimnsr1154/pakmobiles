@@ -1,113 +1,129 @@
-import React, { useState } from 'react';
-import { createTheme } from '@mui/material/styles';
-import '../css/PhoneComparison.css'; // Import the CSS file
-
-
-import {
-  Container,
-  Grid,
-  Paper,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Typography,
-} from '@mui/material';
+import React, { useState, useEffect } from "react";
+import Navbar from "./Navbar";
+import PhoneCard from "./ComparisonCard"; // Import PhoneCard component
+import "../css/PhoneComparison.css"; // Import the CSS file
 
 const PhoneComparison = () => {
-  const [selectedPhones, setSelectedPhones] = useState([]);
+  const [formData, setFormData] = useState({
+    brand: "",
+    model: "",
+  });
 
-  const handlePhoneSelect = (event) => {
-    const selected = event.target.value;
-    setSelectedPhones(selected);
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [message, setMessage] = useState("");
+  const [phoneDetailsList, setPhoneDetailsList] = useState([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch("/api/brands");
+        const data = await response.json();
+        setBrands(data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+
+    fetchBrands();
+  }, []);
+
+  const fetchModels = async (brand) => {
+    try {
+      const response = await fetch(`/api/models/${brand}`);
+      const data = await response.json();
+      setModels(data);
+    } catch (error) {
+      console.error("Error fetching models:", error);
+    }
   };
 
-  const phones = [
-    { id: 1, name: 'Phone A', brand: 'Brand X', ram: '6GB', storage: '128GB' },
-    { id: 2, name: 'Phone B', brand: 'Brand Y', ram: '8GB', storage: '256GB' },
-    { id: 3, name: 'Phone C', brand: 'Brand Z', ram: '4GB', storage: '64GB' },
-  ];
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "brand") {
+      fetchModels(value);
+    }
+  };
+
+  // Function to handle Add Phone button click
+  const handleAddPhone = async (e) => {
+    e.preventDefault();
+    if (formData.model) {
+      try {
+        const response = await fetch(`/api/model/${formData.model}`);
+        const data = await response.json();
+        setPhoneDetailsList((prevList) => [...prevList, data]); // Add new phone details to the list
+        setFormData({ brand: "", model: "" }); // Clear form data
+      } catch (error) {
+        console.error("Error fetching phone details:", error);
+      }
+    }
+  };
+
+  // Function to handle remove button click
+  const handleRemovePhone = (phoneToRemove) => {
+    const updatedList = phoneDetailsList.filter(
+      (phone) => phone !== phoneToRemove
+    );
+    setPhoneDetailsList(updatedList);
+  };
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: 20 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <FormControl fullWidth>
-            <InputLabel>Select Phones to Compare</InputLabel>
-            <Select
-              multiple
-              value={selectedPhones}
-              onChange={handlePhoneSelect}
-              renderValue={(selected) => selected.join(', ')}
-            >
-              {phones.map((phone) => (
-                <MenuItem key={phone.id} value={phone.name}>
-                  {phone.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        {selectedPhones.length > 1 && (
-          <Grid item xs={12}>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Feature</TableCell>
-                    {selectedPhones.map((phone) => (
-                      <TableCell key={phone} align="center">
-                        {phone}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Brand</TableCell>
-                    {selectedPhones.map((phone) => (
-                      <TableCell key={phone} align="center">
-                        {phones.find((p) => p.name === phone)?.brand}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>RAM</TableCell>
-                    {selectedPhones.map((phone) => (
-                      <TableCell key={phone} align="center">
-                        {phones.find((p) => p.name === phone)?.ram}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Storage</TableCell>
-                    {selectedPhones.map((phone) => (
-                      <TableCell key={phone} align="center">
-                        {phones.find((p) => p.name === phone)?.storage}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                  {/* Add more rows for other specifications */}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-        )}
-        {selectedPhones.length <= 1 && (
-          <Grid item xs={12}>
-            <Typography variant="body1" align="center">
-              Select at least two phones to compare.
-            </Typography>
-          </Grid>
-        )}
-      </Grid>
-    </Container>
+    <div>
+      <Navbar />
+      <h2>Compare Phones</h2>
+      <form className="phone-comparison-container">
+        <div>
+          <label>Brand:</label>
+          <select
+            name="brand"
+            value={formData.brand}
+            onChange={handleInputChange}
+            required
+            className="phone-comparison-select"
+          >
+            <option value="">Select a brand</option>
+            {brands.map((brand, index) => (
+              <option key={index} value={brand}>
+                {brand}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Model:</label>
+          <select
+            name="model"
+            value={formData.model}
+            onChange={handleInputChange}
+            required
+            disabled={!formData.brand}
+            className="phone-comparison-select"
+          >
+            <option value="">Select a model</option>
+            {models.map((model, index) => (
+              <option key={index} value={model}>
+                {model}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button class="phone-comparison-add-btn" type="submit" onClick={handleAddPhone}>
+          Add Phone
+        </button>
+        <div class="comparison-card-container">
+          {phoneDetailsList.map((phoneDetails, index) => (
+            <PhoneCard
+              key={index}
+              phoneDetails={phoneDetails}
+              onRemove={handleRemovePhone}
+            />
+          ))}
+        </div>
+      </form>
+    </div>
   );
 };
 
