@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import '../css/PhoneDetail.css';
-import image from './iphone.jpeg';
+import { useLocation } from 'react-router-dom';
 
 const PhoneDetail = () => {
+    const location = useLocation();
     const [phone, setPhone] = useState(null);
 
+    const generateStars = (rating) => {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 !== 0 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+
+        return '★'.repeat(fullStars) + '½'.repeat(halfStar) + '☆'.repeat(emptyStars);
+    };
+
     useEffect(() => {
-        const data = {
-            name: 'Phone Name',
-            image: image,
-            description: 'The Phone Name is a state-of-the-art device offering a seamless user experience with its latest technology and high-end features. It comes with a high-resolution camera, long-lasting battery life, and an impressive display that provides vibrant colors and sharp details. Its sleek design and lightweight build make it comfortable to hold and use. Experience fast and efficient performance with the Phone Name.',
-            price: '999.99',
-            rating: '★★★★☆', // Add a rating field
-        };
-        setPhone(data);
-    }, []);
+        console.log(location.state); // Log the location state
+        if (location.state && location.state.phone) {
+            setPhone(location.state.phone);
+        }
+    }, [location]);
 
     if (!phone) {
         return <div>Loading...</div>;
@@ -27,7 +32,7 @@ const PhoneDetail = () => {
                 <img src={phone.image} alt={phone.name} />
                 <div>
                     <h2>{phone.name}</h2>
-                    <p>{phone.rating}</p>
+                    <p>{generateStars(phone.rating)}</p>
                     <p className="phone-detail-price">${phone.price}</p>
                     <p>{phone.description}</p>
                 </div>
@@ -36,30 +41,56 @@ const PhoneDetail = () => {
                 <h2>Detailed Specifications</h2>
                 <table>
                     <tr>
-                        <th rowspan="5">Build</th>
+                        <th rowSpan="5">Build</th>
                         <th>OS</th>
-                        <td>Android 14 OS</td>
+                        <td>{phone.specs.build.OS}</td>
                     </tr>
                     <tr>
                         <th>UI</th>
-                        <td>FuntouchOS 14</td>
+                        <td>{phone.specs.build.UI}</td>
                     </tr>
                     <tr>
                         <th>Dimensions</th>
-                        <td>163.2 x 75.8 x 7.8 mm</td>
+                        <td>{phone.specs.build.dimensions}</td>
                     </tr>
                     <tr>
                         <th>Weight</th>
-                        <td>186 g</td>
+                        <td>{phone.specs.build.weight}</td>
                     </tr>
                     <tr>
                         <th>SIM</th>
-                        <td>Dual Sim, Dual Standby (Nano-SIM)</td>
+                        <td>{phone.specs.build.SIM}</td>
                     </tr>
-                
+                    <tr>
+                        <th rowSpan="3">Processor</th>
+                        <th>CPU</th>
+                        <td>{phone.specs.processor.CPU}</td>
+                    </tr>
+                    <tr>
+                        <th>Chipset</th>
+                        <td>{phone.specs.processor.chipset}</td>
+                    </tr>
+                    <tr>
+                        <th>GPU</th>
+                        <td>{phone.specs.processor.GPU}</td>
+                    </tr>
+                    <tr>
+                        <th rowSpan="2">Memory</th>
+                        <th>Built-in</th>
+                        <td>{phone.specs.memory.builtIn}</td>
+                    </tr>
+                    <tr>
+                        <th>Card</th>
+                        <td>{phone.specs.memory.card}</td>
+                    </tr>
+                    <tr>
+                        <th>Battery</th>
+                        <th>Capacity</th>
+                        <td>{phone.specs.battery.capacity}</td>
+                    </tr>
                 </table>
             </div>
-        </div>
+            </div>
     );
 };
 

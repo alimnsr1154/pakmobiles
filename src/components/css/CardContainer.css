@@ -2,8 +2,10 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    border-bottom: 1px solid #ccc;
-    /* Add this line */
-    padding-bottom: 20px;
-    /* Add some padding to give space between the cards and the line */
+}
+
+.card-container a {
+    flex: 1 0 20%;
+    max-width: 20%;
+    margin: 1%;
 }
