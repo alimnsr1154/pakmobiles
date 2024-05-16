@@ -15,7 +15,7 @@ const Navbar = () => {
             <button onClick={() => handleButtonClick('/CreateListing')}>Create Listing</button>
             <button onClick={() => handleButtonClick('/PhoneComparison')}>Compare Mobiles</button>
             <button onClick={() => handleButtonClick('/Chats')}>My Chats</button>
-            <button onClick={() => handleButtonClick('/')}>Log Out</button>
+            <button style={{ backgroundColor: '#FF7F7F', color: 'white' }} onClick={() => handleButtonClick('/')}>Log Out</button>
         </nav>
     );
 };

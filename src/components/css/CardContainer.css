@@ -9,3 +9,21 @@
     max-width: 20%;
     margin: 1%;
 }
+
+/* For tablets and small desktops */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .card-container a {
+        flex: 1 0 45%;
+        /* Display 2 cards per row */
+        max-width: 45%;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 767px) {
+    .card-container a {
+        flex: 1 0 90%;
+        /* Display 1 card per row */
+        max-width: 90%;
+    }
+}

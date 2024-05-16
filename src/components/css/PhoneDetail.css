@@ -13,8 +13,8 @@
 }
 
 .phone-detail-row img {
-    width: 50%;
-    height: 600px;
+    width: 60%;
+    height: 500px;
     margin-right: 100px;
     /* Add a right margin to the image */
 }
@@ -25,7 +25,6 @@
 
 .phone-detail-row div {
     text-align: left;
-    margin-top: 70px;
 }
 
 .phone-detail-price {
@@ -39,6 +38,7 @@
 }
 
 
+
 .phone-detail-specs table {
     width: 100%;
     border-collapse: collapse;
@@ -49,4 +49,40 @@
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+}
+
+
+/* For tablets and small desktops */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .phone-detail-row img {
+        width: 50%;
+        /* Adjust the image width as needed */
+        height: auto;
+        /* Adjust the image height as needed */
+    }
+
+    .phone-detail-row p {
+        width: 100%;
+        /* Adjust the paragraph width as needed */
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 767px) {
+    .phone-detail-row {
+        flex-direction: column;
+        /* Stack the items vertically */
+    }
+
+    .phone-detail-row img {
+        width: 100%;
+        /* Make the image full width */
+        height: auto;
+        /* Adjust the image height as needed */
+    }
+
+    .phone-detail-row p {
+        width: 100%;
+        /* Make the paragraph full width */
+    }
 }

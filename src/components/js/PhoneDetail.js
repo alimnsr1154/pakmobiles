@@ -67,6 +67,7 @@ const PhoneDetail = () => {
     return (
         <div className="phone-detail">
             <h1>Phone Details</h1>
+            <hr /> {/* This is the divider line */}
             <div className="phone-detail-row">
                 <img src={phone.image} alt={phone.name} />
                 <div>
@@ -74,7 +75,7 @@ const PhoneDetail = () => {
                     <p>{generateStars(phone.rating)}</p>
                     <p className="phone-detail-price">${phone.price}</p>
                     <p>{phone.description}</p>
-                    <form onSubmit={handleRatingSubmit}>
+                    <form onSubmit={handleRatingSubmit} className="rating-form">
                         <label>
                             Rate this phone:
                             <input type="number" min="1" max="5" value={rating} onChange={handleRatingChange} required />

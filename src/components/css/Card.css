@@ -1,21 +1,51 @@
 .card {
     width: 150px;
     height: 200px;
-    /* Adjust as needed */
     box-sizing: border-box;
     padding: 10px;
     margin: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    /* Add this line */
+    transition: 0.3s;
+    /* Add this line */
+    text-align: center;
+    /* Add this line */
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    /* Add this line */
 }
 
 .card img {
-    width: 70%;
+    width: 100%;
     height: auto;
+    margin: 0 auto;
+    /* Add this line */
+    display: block;
+    /* Add this line */
 }
 
 .card h2 {
+    font-size: 1vw;
+    /* Adjust this value as needed */
+    margin: 0;
+    padding: 10px;
+    color: #ffffff;
+    white-space: nowrap;
+    /* Prevents the text from wrapping */
+    overflow: hidden;
+    /* Hides the overflowed text */
+    text-overflow: ellipsis;
+    /* Adds an ellipsis when the text overflows */
+}
+
+.card p {
     font-size: 15px;
     margin: 0;
     padding: 0;
+    color: #ffffff;
+    /* Add this line */
 }

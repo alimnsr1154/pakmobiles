@@ -16,3 +16,32 @@ button {
 button:hover {
     background-color: rgb(17, 17, 54);
 }
+
+/* For tablets and small desktops */
+@media (min-width: 768px) and (max-width: 1024px) {
+    nav {
+        flex-direction: row;
+        /* Display the nav items in a row */
+    }
+
+    button {
+        padding: 10px 15px;
+        /* Adjust the padding as needed */
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 767px) {
+    nav {
+        flex-direction: column;
+        /* Stack the nav items vertically */
+    }
+
+    button {
+        padding: 10px 20px;
+        margin: 10px 0;
+        /* Add vertical margin and remove horizontal margin */
+        width: 100%;
+        /* Make the buttons full width */
+    }
+}
