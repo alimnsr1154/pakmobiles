@@ -19,10 +19,10 @@ function App() {
       {/* <MessagePage/> */}
       <Router>
         <Routes>
-          <Route path="/" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/PhoneDetail" />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/PhoneDetail" element={<PhoneDetail />}/>
           <Route path="/CreateListing" element={<CreateListing />} />
           <Route path="/PhoneComparison" element={<PhoneComparison />} />
         </Routes>

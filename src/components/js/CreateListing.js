@@ -1,69 +1,136 @@
-import React, { useState } from 'react';
-import '../css/CreateListing.css'; // Import the CSS file
+import React, { useState, useEffect } from "react";
+import Navbar from "./Navbar";
+import "../css/CreateListing.css"; // Import the CSS file
 
 const CreateListing = () => {
-  // State to manage form inputs
   const [formData, setFormData] = useState({
-    brand: '',
-    model: '',
-    descrption: '',
-    condition: '',
-    price: '',
+    brand: "",
+    model: "",
+    description: "",
+    condition: "",
+    price: "",
     images: [],
   });
 
-  // Handle input changes
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch("/api/brands");
+        const data = await response.json();
+        setBrands(data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+
+    fetchBrands();
+  }, []);
+
+  const fetchModels = async (brand) => {
+    try {
+      const response = await fetch(`/api/models/${brand}`);
+      const data = await response.json();
+      setModels(data);
+    } catch (error) {
+      console.error("Error fetching models:", error);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "brand") {
+      fetchModels(value);
+    }
   };
 
-  // Handle image upload
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const imagesArray = files.map((file) => URL.createObjectURL(file));
     setFormData({ ...formData, images: [...formData.images, ...imagesArray] });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send formData to backend or perform necessary actions
-    console.log(formData);
-    // Reset form after submission
-    setFormData({
-      brand: '',
-      model: '',
-      description: '',
-      condition: '',
-      price: '',
-      images: [],
-    });
+
+    const listingData = {
+      ...formData,
+      pictures: formData.images, // Ensure pictures is an array of image URLs
+    };
+
+    try {
+      const response = await fetch("/api/listings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(listingData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage("Listing created successfully");
+        setFormData({
+          brand: "",
+          model: "",
+          description: "",
+          condition: "",
+          price: "",
+          images: [],
+        });
+      } else {
+        setMessage(`Failed to create listing: ${result.error}`);
+      }
+    } catch (error) {
+      setMessage(`Failed to create listing: ${error.message}`);
+    }
   };
 
   return (
     <div>
+      <Navbar />
       <h2>Create a Listing</h2>
-      <form onSubmit={handleSubmit}>
+      <form className="create-listing-container" onSubmit={handleSubmit}>
         <div>
           <label>Brand:</label>
-          <input
-            type="text"
+          <select
             name="brand"
             value={formData.brand}
             onChange={handleInputChange}
             required
-          />
+            className="create-listing-select"
+          >
+            <option value="">Select a brand</option>
+            {brands.map((brand, index) => (
+              <option key={index} value={brand}>
+                {brand}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Model:</label>
-          <input
-            type="text"
+          <select
             name="model"
             value={formData.model}
             onChange={handleInputChange}
             required
-          />
+            disabled={!formData.brand}
+            className="create-listing-select"
+          >
+            <option value="">Select a model</option>
+            {models.map((model, index) => (
+              <option key={index} value={model}>
+                {model}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Description:</label>
@@ -72,6 +139,7 @@ const CreateListing = () => {
             value={formData.description}
             onChange={handleInputChange}
             required
+            class="create-listing-input"
           />
         </div>
         <div>
@@ -82,6 +150,7 @@ const CreateListing = () => {
             value={formData.condition}
             onChange={handleInputChange}
             required
+            class="create-listing-input"
           />
         </div>
         <div>
@@ -92,21 +161,27 @@ const CreateListing = () => {
             value={formData.price}
             onChange={handleInputChange}
             required
+            class="create-listing-input"
           />
         </div>
         <div>
           <label>Images:</label>
-          <input type="file" multiple onChange={handleImageUpload} />
+          <input class="create-listing-add-file" type="file" multiple onChange={handleImageUpload} />
         </div>
-        <button type="submit">Create Listing</button>
+        <button class="create-listing-button" type="submit">Create Listing</button>
       </form>
-      {/* Display uploaded images */}
+      {message && <p>{message}</p>}
       {formData.images.length > 0 && (
         <div>
           <h3>Uploaded Images:</h3>
           <div>
             {formData.images.map((image, index) => (
-              <img key={index} src={image} alt={`Uploaded ${index}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+              <img
+                key={index}
+                src={image}
+                alt={`Uploaded ${index}`}
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+              />
             ))}
           </div>
         </div>
