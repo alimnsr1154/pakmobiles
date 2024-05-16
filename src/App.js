@@ -22,6 +22,7 @@ function App() {
           <Route path="/PhoneDetail" element={<PhoneDetail />} />
           <Route path="/CreateListing" element={<CreateListing />} />
           <Route path="/PhoneComparison" element={<PhoneComparison />} />
+          <Route path="/Chats" element={<MessagePage />} />
         </Routes>
       </Router>
     </div>

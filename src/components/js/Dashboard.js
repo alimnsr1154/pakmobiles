@@ -16,8 +16,7 @@ const Dashboard = () => {
             try {
                 const response = await axios.get('http://localhost:3001/api/mobiles');
                 setCards(response.data);
-                // Print the data to the console
-                console.log(response.data);
+                // Print the data to the consoleS
 
             } catch (err) {
                 console.error("Error fetching data from server:", err);

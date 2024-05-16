@@ -14,7 +14,7 @@ const Navbar = () => {
             <button onClick={() => handleButtonClick('/')}>Dashboard</button>
             <button onClick={() => handleButtonClick('/CreateListing')}>Create Listing</button>
             <button onClick={() => handleButtonClick('/PhoneComparison')}>Compare Mobiles</button>
-            <button>Button 4</button>
+            <button onClick={() => handleButtonClick('/Chats')}>My Chats</button>
             <button>Button 5</button>
         </nav>
     );

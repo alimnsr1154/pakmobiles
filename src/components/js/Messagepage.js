@@ -6,6 +6,8 @@ const MessagePage = () => {
   const [chats, setChats] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [user1, setUser1] = useState(null);
+  const [user2, setUser2] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const id = 2; // Assuming the user with id=1 is John Doe
   useEffect(() => {
@@ -22,53 +24,46 @@ const MessagePage = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch messages for the selected chat
-    // const fetchMessages = async () => {
-    //   if (selectedChat) {
-    //     try {
-    //       const response = await axios.get(`http://localhost:5000/messages/${selectedChat}`);
-    //       setMessages(response.data);
-    //     } catch (error) {
-    //       console.error('Error fetching messages:', error);
-    //     }
-    //   }
-    // };
     const fetchMessages = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/messages/${id}`);
-        const messages = response.data.map((message) => ({
-          messageId: message.messageId,
-          chatId: message.chatId,
-          text: message.message,
-          sender: message.sender_id === id ? 'self' : 'other',
-        }));
-        setMessages(messages);
-      } catch (error) {
-        console.error('Error fetching messages:', error);
+      if (user1 && user2) {
+        try {
+          const response = await axios.get(`/api/messages/${user1}/${user2}`);
+          const messages = response.data.map((message) => ({
+            messageId: message.messageId,
+            chatId: message.chatId,
+            text: message.message,
+            sender: message.sender_id === user1 ? 'self' : 'other',
+          }));
+          setMessages(messages);
+        } catch (error) {
+          console.error('Error fetching messages:', error);
+        }
       }
     };
     fetchMessages();
-  }, [selectedChat]);
-
+  }, [user1, user2]);
   const handleChatClick = (chatId) => {
     setSelectedChat(chatId);
   };
 
-  const handleMessageChange = (e) => {
-    setNewMessage(e.target.value);
+  const handleMessageChange = (event) => {
+    setNewMessage(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.trim() !== '') {
-      // Add new message to the messages array
-      const newMessageObj = {
-        messageId: messages.length + 1,
-        chatId: selectedChat,
-        text: newMessage,
-        sender: 'self',
-      };
-      setMessages([...messages, newMessageObj]);
-      setNewMessage('');
+      try {
+        const messageData = {
+          sender: user1,
+          receiver: user2,
+          text: newMessage,
+          time: new Date()
+        };
+        await axios.post('http://localhost:3001/api/messages', messageData);
+        setNewMessage(''); // Clear the input field
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   };
 
@@ -101,10 +96,10 @@ const MessagePage = () => {
           <h2>{selectedChat ? chats.find((chat) => chat.chatId === selectedChat).title : 'Select a chat'}</h2>
         </div>
         <div className="message-list">
-          {selectedChat && (
+          {messages && (
             <ul>
               {messages.map((message) => (
-                <li key={message.messageId} className={message.sender === 'self' ? 'sent' : 'received'}>
+                <li key={message.messageId} className={message.sender === user1 ? 'sent' : 'received'}>
                   {message.text}
                 </li>
               ))}

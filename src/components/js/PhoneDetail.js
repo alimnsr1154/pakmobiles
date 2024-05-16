@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../css/PhoneDetail.css';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const PhoneDetail = () => {
     const location = useLocation();
     const [phone, setPhone] = useState(null);
+    const [rating, setRating] = useState('');
 
     const generateStars = (rating) => {
         const fullStars = Math.floor(rating);
@@ -15,7 +17,6 @@ const PhoneDetail = () => {
     };
 
     useEffect(() => {
-        console.log(location.state); // Log the location state
         if (location.state && location.state.phone) {
             setPhone(location.state.phone);
         }
@@ -24,6 +25,44 @@ const PhoneDetail = () => {
     if (!phone) {
         return <div>Loading...</div>;
     }
+
+    const handleRatingChange = (event) => {
+        setRating(event.target.value);
+    };
+
+    
+    const handleRatingSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.put(`/api/mobiles/${phone.name}`, {
+                rating: (phone.rating + Number(rating)) / 2
+            }, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (response.status !== 200) {
+                throw new Error('Network response was not ok');
+            } else {
+                alert("Rating has been submitted successfully");
+
+                // Fetch the updated phone data
+                const updatedPhoneResponse = await axios.get(`/api/mobiles/${phone.name}`);
+                if (updatedPhoneResponse.status !== 200) {
+                    throw new Error('Failed to fetch updated phone data');
+                }
+
+                const updatedPhone = updatedPhoneResponse.data;
+                if (updatedPhone && updatedPhone.name) {
+                    setPhone(updatedPhone);
+                    window.location.reload();
+                } else {
+                    throw new Error('Invalid data from server');
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <div className="phone-detail">
@@ -35,8 +74,16 @@ const PhoneDetail = () => {
                     <p>{generateStars(phone.rating)}</p>
                     <p className="phone-detail-price">${phone.price}</p>
                     <p>{phone.description}</p>
+                    <form onSubmit={handleRatingSubmit}>
+                        <label>
+                            Rate this phone:
+                            <input type="number" min="1" max="5" value={rating} onChange={handleRatingChange} required />
+                        </label>
+                        <button type="submit">Submit rating</button>
+                    </form>
                 </div>
             </div>
+
             <div className="phone-detail-specs">
                 <h2>Detailed Specifications</h2>
                 <table>
@@ -90,7 +137,7 @@ const PhoneDetail = () => {
                     </tr>
                 </table>
             </div>
-            </div>
+        </div>
     );
 };
 

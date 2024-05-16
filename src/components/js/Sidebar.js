@@ -14,7 +14,6 @@ const Sidebar = ({ setSelectedBrand, setSelectedPriceRange }) => {
             try {
                 const responseBrands = await axios.get('http://localhost:3001/api/mobiles/brands');
                 setBrands(responseBrands.data);
-
                 const responsePrices = await axios.get('http://localhost:3001/api/mobiles/prices');
                 const minPrice = Math.min(...responsePrices.data);
                 const maxPrice = Math.max(...responsePrices.data);
@@ -24,7 +23,6 @@ const Sidebar = ({ setSelectedBrand, setSelectedPriceRange }) => {
                 console.error("Error fetching data from server:", err);
             }
         };
-
         // Call the function to fetch data
         fetchData();
     }, []); // Empty dependency array means this effect runs once on mount

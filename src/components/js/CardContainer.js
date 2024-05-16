@@ -9,7 +9,6 @@ const CardContainer = ({ title, cards }) => (
     <div className="card-container">
       {cards.map((card, index) => {
         // Log the card data
-        console.log(card);
         return (
           <Link
             to={`/PhoneDetail`}
