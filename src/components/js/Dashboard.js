@@ -22,7 +22,6 @@ const Dashboard = () => {
                 console.error("Error fetching data from server:", err);
             }
         };
-
         // Call the function to fetch data
         fetchData();
     }, []); // Empty dependency array means this effect runs once on mount
@@ -38,7 +37,7 @@ const Dashboard = () => {
             <Sidebar setSelectedBrand={setSelectedBrand} setSelectedPriceRange={setSelectedPriceRange} />
             <div className="content">
                 <Navbar />
-                <CardContainer title="My Cards" cards={filteredCards} />
+                <CardContainer title="Mobile Phones" cards={filteredCards} />
             </div>
         </div>
     );

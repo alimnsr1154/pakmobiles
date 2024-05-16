@@ -6,6 +6,21 @@
     border: 1px solid rgb(0, 0, 0);
     /* Add this line */
 }
+
+.button-active {
+    background-color: #312f3e;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-active:hover {
+    background-color: #000000;
+    color: white;
+}
+
+
 .sidebar .arrow {
     margin-right: 10px;
     /* Add this line */

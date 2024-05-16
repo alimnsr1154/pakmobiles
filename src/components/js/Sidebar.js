@@ -38,7 +38,7 @@ const Sidebar = ({ setSelectedBrand, setSelectedPriceRange }) => {
             {isBrandExpanded && (
                 <div>
                     {brands.map((brand, index) => (
-                        <button key={index} onClick={() => setSelectedBrand(brand)}>{brand}</button>
+                        <button className="button-active" key={index} onClick={() => setSelectedBrand(brand)}>{brand}</button>
                     ))}
                 </div>
             )}
@@ -51,7 +51,7 @@ const Sidebar = ({ setSelectedBrand, setSelectedPriceRange }) => {
             {isPriceExpanded && (
                 <div>
                     {priceRanges.map((price, index) => (
-                        <button key={index} onClick={() => setSelectedPriceRange([price, priceRanges[index + 1] ? priceRanges[index + 1] - 1 : Infinity])}>
+                        <button className="button-active" key={index} onClick={() => setSelectedPriceRange([price, priceRanges[index + 1] ? priceRanges[index + 1] - 1 : Infinity])}>
                             {index < priceRanges.length - 1 ? `$${price} - $${priceRanges[index + 1] - 1}` : `$${price} and above`}
                         </button>
                     ))}
