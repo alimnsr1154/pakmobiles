@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Navbar from "./Navbar";
+import { UserContext } from '../../contexts/UserContext';
 import "../css/CreateListing.css"; // Import the CSS file
 
 const CreateListing = () => {
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+  const [message, setMessage] = useState("");
+
+  const { email } = useContext(UserContext);
+
   const [formData, setFormData] = useState({
+    username: "", 
     brand: "",
     model: "",
     description: "",
@@ -11,10 +19,6 @@ const CreateListing = () => {
     price: "",
     images: [],
   });
-
-  const [brands, setBrands] = useState([]);
-  const [models, setModels] = useState([]);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchBrands = async () => {
@@ -58,6 +62,8 @@ const CreateListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    formData.username = email
+
     const listingData = {
       ...formData,
       pictures: formData.images, // Ensure pictures is an array of image URLs
@@ -77,6 +83,7 @@ const CreateListing = () => {
       if (response.ok) {
         setMessage("Listing created successfully");
         setFormData({
+          username: email, // Reset with the current email
           brand: "",
           model: "",
           description: "",
@@ -139,7 +146,7 @@ const CreateListing = () => {
             value={formData.description}
             onChange={handleInputChange}
             required
-            class="create-listing-input"
+            className="create-listing-input"
           />
         </div>
         <div>
@@ -150,7 +157,7 @@ const CreateListing = () => {
             value={formData.condition}
             onChange={handleInputChange}
             required
-            class="create-listing-input"
+            className="create-listing-input"
           />
         </div>
         <div>
@@ -161,14 +168,14 @@ const CreateListing = () => {
             value={formData.price}
             onChange={handleInputChange}
             required
-            class="create-listing-input"
+            className="create-listing-input"
           />
         </div>
         <div>
           <label>Images:</label>
-          <input class="create-listing-add-file" type="file" multiple onChange={handleImageUpload} />
+          <input className="create-listing-add-file" type="file" multiple onChange={handleImageUpload} />
         </div>
-        <button class="create-listing-button" type="submit">Create Listing</button>
+        <button className="create-listing-button" type="submit">Create Listing</button>
       </form>
       {message && <p>{message}</p>}
       {formData.images.length > 0 && (

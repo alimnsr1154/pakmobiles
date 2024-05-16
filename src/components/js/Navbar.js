@@ -11,11 +11,11 @@ const Navbar = () => {
 
     return (
         <nav>
-            <button onClick={() => handleButtonClick('/')}>Dashboard</button>
+            <button onClick={() => handleButtonClick('/Dashboard')}>Dashboard</button>
             <button onClick={() => handleButtonClick('/CreateListing')}>Create Listing</button>
             <button onClick={() => handleButtonClick('/PhoneComparison')}>Compare Mobiles</button>
             <button onClick={() => handleButtonClick('/Chats')}>My Chats</button>
-            <button>Button 5</button>
+            <button onClick={() => handleButtonClick('/')}>Log Out</button>
         </nav>
     );
 };

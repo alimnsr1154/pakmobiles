@@ -1,58 +1,65 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { Component } from "react";
+// src/components/js/Login.js
+import React, { Component, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/login.css';
-import { toast, ToastContainer } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
-//import { withRouter } from 'react-router-dom';
+import { UserContext } from '../../contexts/UserContext';
 
+const LogInWithNavigate = (props) => {
+  const navigate = useNavigate();
+  const { setEmail } = useContext(UserContext);
+  return <Login navigate={navigate} setEmail={setEmail} {...props} />;
+};
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      };
+      email: "",
+      password: "",
+      errorMessage: "",
+    };
   }
+
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  }
+  };
+
   handleSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = this.state;
-  
-    try {
-      const response = await axios.post('http://localhost:5000/login', { email, password });
-      console.log('Login response:', response.data);
-      if (response.data.message === 'Login successful') {
-        console.log('Login successful');
-        toast.success('Login successful');
-        this.props.navigate('/dashboard'); // Use the navigate function from props
-      } else {
-        console.log('Login failed:', response.data.message);
-        toast.error(response.data.message);
-      }
-    } catch (err) {
-      console.error('Error during login', err);
-      toast.error('Error during login');
-    }
-  };  
-  
-  render() {
-    const { email, password, isLoggedIn } = this.state;
-    return (
-        
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <h3>Sign In</h3>
 
+    if (!email || !password) {
+      this.setState({ errorMessage: "All fields are required." });
+      return;
+    }
+
+    try {
+      await axios.post("/login", { email, password });
+      this.props.setEmail(email);
+      this.props.navigate("/Dashboard");
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        this.setState({ errorMessage: err.response.data });
+      } else {
+        this.setState({ errorMessage: "Log in failed. Please try again." });
+      }
+      console.error("Error during login", err);
+    }
+  };
+
+  render() {
+    const { email, password } = this.state;
+    return (
+      <div>
+        <form className="login-container" onSubmit={this.handleSubmit}>
+          <h3>Log In</h3>
           <div className="mb-3">
             <label>Email address</label>
             <input
               type="email"
-              className="form-control"
+              className="login-input"
               placeholder="Enter email"
               name="email"
               value={email}
@@ -63,35 +70,31 @@ class Login extends Component {
             <label>Password</label>
             <input
               type="password"
-              className="form-control"
+              className="login-input"
               placeholder="Enter password"
               name="password"
               value={password}
               onChange={this.handleInputChange}
             />
           </div>
-          <div className="mb-3">
-            <div className="custom-control custom-checkbox">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="customCheck1"
-              />
-              <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-            </div>
+          <div className="login-error">
+            {this.state.errorMessage && (
+              <div className="error-message">{this.state.errorMessage}</div>
+            )}
           </div>
+          <div className="mb-3"></div>
           <div className="d-grid">
-            <button type="submit" className="btn btn-primary">Submit</button>
+            <button type="submit" className="login-button">
+              Submit
+            </button>
           </div>
-          <p className="forgot-password text-right">
-            Forgot <a href="#">password?</a>
+          <p className="signup-link text-center">
+            Don't have an account? <a href="/">Sign up</a>
           </p>
-          <p className="signup-link text-center">Don't have an account? <a href="/">Sign up</a></p>
         </form>
-        <ToastContainer />
       </div>
     );
   }
 }
-export default Login;
-//export default withRouter(Login);
+
+export default LogInWithNavigate;
