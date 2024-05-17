@@ -1,0 +1,45 @@
+.listing-card {
+    margin: 10px;
+    padding: 10px;
+    display: inline-block;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
+    height: 350px;
+    width: 80%;
+    text-align: center;
+  }
+  
+  .listing-card-image {
+    margin: auto;
+    display: block;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+    border-radius: 3%;
+    height: 100px;
+    width: 100px;
+  }
+  .listing-card-rm-button:hover {
+    background-color: #8d2d2d;
+    transform: scale(1.05); /* Optional: Scale effect on hover */
+  }
+  
+  .listing-card-rm-button-container {
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .listing-card-rm-button {
+    padding: 10px;
+    width: 35px; 
+    overflow: hidden;
+    border: none;
+    border-radius: 5px;
+    align-self: flex-end;
+    background-color: #a52d2d;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .listing-card-stars {
+      color: #ffef3e;
+  }

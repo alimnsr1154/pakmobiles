@@ -1,29 +1,21 @@
-.sidebar button {
-    width: 100%;
-    height: 50px;
-    margin-bottom: 10px;
-    text-align: left;
-    border: 1px solid rgb(0, 0, 0);
-    /* Add this line */
+
+.button-active-sidebar {
+    width: 90%;
+    height: 40px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-radius: 8px;
+    background-color: #181818;  
 }
 
-.button-active {
-    background-color: #312f3e;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.button-active:hover {
-    background-color: #000000;
+.button-active-sidebar:hover {
+    background-color: #121212;
     color: white;
 }
 
 
 .sidebar .arrow {
     margin-right: 10px;
-    /* Add this line */
 }
 
 /* For tablets and small desktops */

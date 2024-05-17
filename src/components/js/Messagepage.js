@@ -1,119 +1,117 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import '../css/MessagePage.css';
+import React, { useContext, useState, useEffect } from "react";
+import Navbar from "./Navbar";
+import axios from "axios";
+import { UserContext } from "../../contexts/UserContext";
+import "../css/MessagePage.css";
 
 const MessagePage = () => {
-  const [chats, setChats] = useState([]);
+  const { email } = useContext(UserContext); // Get the current user's email
   const [messages, setMessages] = useState([]);
-  const [selectedChat, setSelectedChat] = useState(null);
-  const [user1, setUser1] = useState(null);
-  const [user2, setUser2] = useState(null);
-  const [newMessage, setNewMessage] = useState('');
-  const id = 2; // Assuming the user with id=1 is John Doe
+  const [text, setText] = useState("");
+  const [contacts, setContacts] = useState([]);
+  const [selectedContact, setSelectedContact] = useState("");
+
   useEffect(() => {
-    // Fetch chats on component mount
-    const fetchChats = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/chats');
-        setChats(response.data);
-      } catch (error) {
-        console.error('Error fetching chats:', error);
-      }
-    };
-    fetchChats();
+    fetchMessages();
   }, []);
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      if (user1 && user2) {
-        try {
-          const response = await axios.get(`/api/messages/${user1}/${user2}`);
-          const messages = response.data.map((message) => ({
-            messageId: message.messageId,
-            chatId: message.chatId,
-            text: message.message,
-            sender: message.sender_id === user1 ? 'self' : 'other',
-          }));
-          setMessages(messages);
-        } catch (error) {
-          console.error('Error fetching messages:', error);
-        }
+    if (selectedContact) {
+      fetchMessages();
+    }
+  }, [selectedContact]);
+
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/messages/${email}`
+      );
+      setMessages(response.data);
+      const uniqueContacts = [
+        ...new Set(
+          response.data.map((msg) =>
+            msg.sender === email ? msg.receiver : msg.sender
+          )
+        ),
+      ];
+      setContacts(uniqueContacts);
+      if (uniqueContacts.length > 0 && !selectedContact) {
+        setSelectedContact(uniqueContacts[0]);
       }
-    };
-    fetchMessages();
-  }, [user1, user2]);
-  const handleChatClick = (chatId) => {
-    setSelectedChat(chatId);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   };
 
-  const handleMessageChange = (event) => {
-    setNewMessage(event.target.value);
+  const sendMessage = async () => {
+    if (!selectedContact) return;
+
+    try {
+      const newMessage = { sender: email, receiver: selectedContact, text };
+      const response = await axios.post(
+        "http://localhost:3001/messages",
+        newMessage
+      );
+      setMessages([...messages, response.data]);
+      setText("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
 
-  const handleSendMessage = async () => {
-    if (newMessage.trim() !== '') {
-      try {
-        const messageData = {
-          sender: user1,
-          receiver: user2,
-          text: newMessage,
-          time: new Date()
-        };
-        await axios.post('http://localhost:3001/api/messages', messageData);
-        setNewMessage(''); // Clear the input field
-      } catch (error) {
-        console.error('Error sending message:', error);
-      }
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
     }
   };
 
   return (
-    <div className="message-page">
-      <div className="chat-list">
-        <div className="chat-list-header">
-          <h2>Chats</h2>
+    <div>
+      <Navbar />
+      <div className="message-page">
+        <div className="message-page-sidebar">
+          <h2>Contacts</h2>
+          <ul>
+            {contacts.map((contact) => (
+              <li
+                key={contact}
+                className={contact === selectedContact ? "selected" : ""}
+                onClick={() => setSelectedContact(contact)}
+              >
+                {contact}
+              </li>
+            ))}
+          </ul>
         </div>
-        <ul className="chat-list-items">
-          {chats.map((chat) => (
-            <li
-              key={chat.chatId}
-              className={selectedChat === chat.chatId ? 'selected' : ''}
-              onClick={() => handleChatClick(chat.chatId)}
-            >
-              <img src={`/uploads/${chat.avatarFilename}`} alt={chat.title} className="chat-avatar" />
-              <span className="chat-title">{chat.title}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="chat-messages">
-        <div className="chat-header">
-          <img
-            src={selectedChat ? `/uploads/${chats.find((chat) => chat.chatId === selectedChat).avatarFilename}` : ''}
-            alt="Chat Avatar"
-            className="chat-avatar"
-          />
-          <h2>{selectedChat ? chats.find((chat) => chat.chatId === selectedChat).title : 'Select a chat'}</h2>
-        </div>
-        <div className="message-list">
-          {messages && (
-            <ul>
-              {messages.map((message) => (
-                <li key={message.messageId} className={message.sender === user1 ? 'sent' : 'received'}>
-                  {message.text}
-                </li>
+        <div className="chat-container">
+          <h1>Chat with {selectedContact}</h1>
+          <div className="chat-box">
+            {messages
+              .filter(
+                (msg) =>
+                  (msg.sender === email && msg.receiver === selectedContact) ||
+                  (msg.receiver === email && msg.sender === selectedContact)
+              )
+              .map((msg) => (
+                <div
+                key={msg._id}
+                className={`message ${msg.sender === email ? 'sent' : 'received'}`}
+              >
+                <strong>{msg.sender === email ? 'You' : msg.sender}</strong>: {msg.text}{' '}
+                <em>{new Date(msg.time).toLocaleTimeString()}</em>
+              </div>
               ))}
-            </ul>
-          )}
-        </div>
-        <div className="message-input">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={newMessage}
-            onChange={handleMessageChange}
-          />
-          <button onClick={handleSendMessage}>Send</button>
+          </div>
+          <div className="input-box">
+            <input
+              type="text"
+              placeholder="Message"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyPress={handleKeyPress} // Add this line
+            />
+            <button onClick={sendMessage}>Send</button>
+          </div>
         </div>
       </div>
     </div>

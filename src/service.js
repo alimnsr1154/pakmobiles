@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./db"); // Import the function to connect to MongoDB
 const mobilesRouter = require("./routes/mobiles"); // Import the router for mobiles
+const messagesRouter = require("./routes/messages"); // Import the router for mobiles
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid"); // For generating unique IDs
@@ -36,6 +37,7 @@ const Mobile = mongoose.model("mobiles", mobileSchema);
 
 // Routes
 app.use("", mobilesRouter); // Mount the mobiles router
+app.use("", messagesRouter); // Mount the messages router
 
 // Endpoint to get distinct brands
 app.get("/api/brands", async (req, res) => {
@@ -116,26 +118,22 @@ app.post("/api/listings", async (req, res) => {
   }
 });
 
+app.get('/api/adlistings/:model', async (req, res) => {
+  const { model } = req.params;
+  try {
+    const adListings = await Listing.find({ model });
+    res.json(adListings);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String
 });
-// Chat and Message schemas
-const chatSchema = new mongoose.Schema({
-  chatId: Number,
-  title: String,
-  avatarFilename: String
-});
 
-const messageSchema = new mongoose.Schema({
-  messageId: Number,
-  chatId: Number,
-  text: String,
-  sender: String
-});
-const Chat = mongoose.model('chats', chatSchema);
-const Message = mongoose.model('messages', messageSchema);
 const User = mongoose.model('users', userSchema);
 
 // Routes
@@ -155,8 +153,6 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-
-
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   console.log('Login request body:', req.body); // Add this line
@@ -171,78 +167,6 @@ app.post('/login', async (req, res) => {
     }
   } catch (error) {
     res.status(500).send('Error during login');
-  }
-});
-
-
-// Get all chats
-app.get('/chats', async (req, res) => {
-  try {
-      const chats = await Chat.find();
-      console.log('Retrieved chats:', chats); // Log retrieved chats
-      res.json(chats);
-  } catch (error) {
-      console.error('Error fetching chats:', error); // Log error
-      res.status(500).json({ error: 'Error fetching chats' });
-  }
-});
-
-
-
-// Get messages for a specific chat
-app.get('/messages/:chatId', async (req, res) => {
-  const chatId = req.params.chatId;
-  try {
-      const messages = await Message.find({ chatId });
-      console.log(`Retrieved messages for chatId ${chatId}:`, messages); // Log retrieved messages
-      res.json(messages);
-  } catch (error) {
-      console.error(`Error fetching messages for chatId ${chatId}:`, error); // Log error
-      res.status(500).json({ error: 'Error fetching messages' });
-  }
-});
-
-// Get messages for a specific user
-app.get('/messages/:id', async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const messages = await Message.aggregate([
-      {
-        $lookup: {
-          from: 'chats',
-          localField: 'chatId',
-          foreignField: 'chatId',
-          as: 'chat',
-        },
-      },
-      {
-        $match: {
-          $or: [
-            { 'chat.sender_id': parseInt(userId) },
-            { 'chat.receiver_id': parseInt(userId) },
-          ],
-        },
-      },
-      {
-        $project: {
-          messageId: 1,
-          chatId: 1,
-          message: 1,
-          sender_id: {
-            $cond: {
-              if: { $eq: ['$chat.sender_id', parseInt(userId)] },
-              then: parseInt(userId),
-              else: '$chat.receiver_id',
-            },
-          },
-        },
-      },
-    ]);
-    console.log(`Retrieved messages for userId ${userId}:`, messages);
-    res.json(messages);
-  } catch (error) {
-    console.error(`Error fetching messages for userId ${userId}:`, error);
-    res.status(500).json({ error: 'Error fetching messages' });
   }
 });
 

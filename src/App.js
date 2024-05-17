@@ -17,8 +17,8 @@ function App() {
         <Router>
           <Routes>
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/PhoneDetail" element={<PhoneDetail />} />
             <Route path="/CreateListing" element={<CreateListing />} />
             <Route path="/PhoneComparison" element={<PhoneComparison />} />

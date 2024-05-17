@@ -28,8 +28,8 @@ const Sidebar = ({ setSelectedBrand, setSelectedPriceRange }) => {
     }, []); // Empty dependency array means this effect runs once on mount
 
     return (
-        <div className="sidebar">
-            <button onClick={() => {
+        <div className="dashboard-sidebar">
+            <button className="dashboard-sidebar-button" onClick={() => {
                 if (isBrandExpanded) setSelectedBrand(null);
                 setBrandExpanded(!isBrandExpanded);
             }}>
@@ -38,11 +38,11 @@ const Sidebar = ({ setSelectedBrand, setSelectedPriceRange }) => {
             {isBrandExpanded && (
                 <div>
                     {brands.map((brand, index) => (
-                        <button className="button-active" key={index} onClick={() => setSelectedBrand(brand)}>{brand}</button>
+                        <button className="button-active-sidebar" key={index} onClick={() => setSelectedBrand(brand)}>{brand}</button>
                     ))}
                 </div>
             )}
-            <button onClick={() => {
+            <button className="dashboard-sidebar-button" onClick={() => {
                 if (isPriceExpanded) setSelectedPriceRange([0, Infinity]);
                 setPriceExpanded(!isPriceExpanded);
             }}>
@@ -51,7 +51,7 @@ const Sidebar = ({ setSelectedBrand, setSelectedPriceRange }) => {
             {isPriceExpanded && (
                 <div>
                     {priceRanges.map((price, index) => (
-                        <button className="button-active" key={index} onClick={() => setSelectedPriceRange([price, priceRanges[index + 1] ? priceRanges[index + 1] - 1 : Infinity])}>
+                        <button className="button-active-sidebar" key={index} onClick={() => setSelectedPriceRange([price, priceRanges[index + 1] ? priceRanges[index + 1] - 1 : Infinity])}>
                             {index < priceRanges.length - 1 ? `$${price} - $${priceRanges[index + 1] - 1}` : `$${price} and above`}
                         </button>
                     ))}

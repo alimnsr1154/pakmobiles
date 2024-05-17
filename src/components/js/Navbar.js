@@ -11,11 +11,11 @@ const Navbar = () => {
 
     return (
         <nav>
-            <button onClick={() => handleButtonClick('/Dashboard')}>Dashboard</button>
-            <button onClick={() => handleButtonClick('/CreateListing')}>Create Listing</button>
-            <button onClick={() => handleButtonClick('/PhoneComparison')}>Compare Mobiles</button>
-            <button onClick={() => handleButtonClick('/Chats')}>My Chats</button>
-            <button style={{ backgroundColor: '#FF7F7F', color: 'white' }} onClick={() => handleButtonClick('/')}>Log Out</button>
+            <button className="navbar-button" onClick={() => handleButtonClick('/Dashboard')}>Dashboard</button>
+            <button className="navbar-button" onClick={() => handleButtonClick('/CreateListing')}>Create Listing</button>
+            <button className="navbar-button" onClick={() => handleButtonClick('/PhoneComparison')}>Compare Mobiles</button>
+            <button className="navbar-button" onClick={() => handleButtonClick('/Chats')}>My Chats</button>
+            <button className="logout-button" onClick={() => handleButtonClick('/')}>Log Out</button>
         </nav>
     );
 };

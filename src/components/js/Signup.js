@@ -34,7 +34,7 @@ class SignUp extends Component {
 
     try {
       await axios.post("/signup", formData);
-      this.props.navigate("/login");
+      this.props.navigate("/");
     } catch (err) {
       if (err.response && err.response.status === 400) {
         this.setState({ errorMessage: err.response.data });
@@ -47,7 +47,7 @@ class SignUp extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className="signup-container">
+        <form onSubmit={this.handleSubmit} className="signup-container">
         <h3>Sign Up</h3>
         <div className="mb-3">
           <label>Name</label>
@@ -87,7 +87,7 @@ class SignUp extends Component {
           </button>
         </div>
         <p className="signup-link text-center">
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <a href="/">Login</a>
         </p>
       </form>
     );

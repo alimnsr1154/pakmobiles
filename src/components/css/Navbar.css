@@ -1,47 +1,68 @@
 nav {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-button {
-    background-color: rgb(70, 70, 185);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.navbar-button {
+  background-color: #2c8030;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  color: white;
+  border-radius: 0px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar-button:hover {
+  background-color: #1f6824;
+}
+
+.logout-button {
+  border-radius: 0px;
+  width: 20%;
+  display: flexbox;
+  align-self: center;
+  border: none;
+  background-color: #8b1a1a;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #6a1515;
 }
 
 button:hover {
-    background-color: rgb(17, 17, 54);
+  background-color: rgb(17, 17, 54);
 }
 
 /* For tablets and small desktops */
 @media (min-width: 768px) and (max-width: 1024px) {
-    nav {
-        flex-direction: row;
-        /* Display the nav items in a row */
-    }
+  nav {
+    flex-direction: row;
+    /* Display the nav items in a row */
+  }
 
-    button {
-        padding: 10px 15px;
-        /* Adjust the padding as needed */
-    }
+  button {
+    padding: 10px 15px;
+    /* Adjust the padding as needed */
+  }
 }
 
 /* For mobile devices */
 @media (max-width: 767px) {
-    nav {
-        flex-direction: column;
-        /* Stack the nav items vertically */
-    }
+  nav {
+    flex-direction: column;
+    /* Stack the nav items vertically */
+  }
 
-    button {
-        padding: 10px 20px;
-        margin: 10px 0;
-        /* Add vertical margin and remove horizontal margin */
-        width: 100%;
-        /* Make the buttons full width */
-    }
+  button {
+    padding: 10px 20px;
+    margin: 10px 0;
+    /* Add vertical margin and remove horizontal margin */
+    width: 100%;
+    /* Make the buttons full width */
+  }
 }

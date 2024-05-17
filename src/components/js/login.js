@@ -89,7 +89,7 @@ class Login extends Component {
             </button>
           </div>
           <p className="signup-link text-center">
-            Don't have an account? <a href="/">Sign up</a>
+            Don't have an account? <a href="/signup">Sign up</a>
           </p>
         </form>
       </div>

@@ -2,22 +2,27 @@
     display: flex;
 }
 
-.sidebar {
-    width: 300px;
-    height: 300vh;
-    border-right: 1px solid #ccc;
-    background-color: black;
-    color: white;
+.dashboard-sidebar {
+    width: 20%;
+    background-color: #1e1e1e;
+    border-right: 2px solid #333;
+    padding: 10px;
 }
 
-.sidebar button {
+.dashboard-sidebar-button {
     width: 100%;
     height: 50px;
+    margin-top: 10px;
     margin-bottom: 10px;
-    margin: 0;
+    border-radius: 8px;
+    background-color: #121212;    
+}
+
+.dashboard-sidebar-button:hover {
+    background-color: #101010;    
 }
 
 .content {
-    flex-grow: 1;
+    width: 80%;
     overflow: auto;
 }

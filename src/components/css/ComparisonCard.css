@@ -17,8 +17,8 @@
   height: 100px;
   width: 100px;
 }
-.comparison-card-rm-button:hover {
-  background-color: #8d2d2d;
+.comparison-card-rm-button {
+  background-color: #8b1a1a;
   transform: scale(1.05); /* Optional: Scale effect on hover */
 }
 
